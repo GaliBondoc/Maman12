@@ -1,5 +1,3 @@
-import java.lang.reflect.AnnotatedElement;
-
 /**
  * Write a description of class RectangleB here.
  *
@@ -13,38 +11,41 @@ public class RectangleB {
     private int _width;
     private int _height;
 
+
     public RectangleB(int w, int h){
-        if (w <= 0 || w % 10 > 0 || h <= 0 || h % 10 > 0) {
-            _pointSW.setX(1);
-            _pointSW.setY(1);
-        }
+        if (w <= 0)
+            w = 1;
+        if (h <= 0)
+            h = 1;
+        _height = h;
+        _width = w;
+        _pointSW = new Point (0 , 0);
+        _pointNE = new Point (w , h);
     }
 
     public RectangleB(Point p, int w, int h){
-        if (w <= 0 || w % 10 > 0) {
+        if (w <= 0)
             w = 1;
-        }
-        if (h <= 0 || h % 10 > 0) {
+        if (h <= 0)
             h = 1;
-        }
-        if (p.getX() <= 0 || p.getX() % 10 > 0 || p.getY() <= 0 || p.getY() % 10 > 0){
-            p.setX(1);
-            p.setY(1);
-        }
+        _height = h;
+        _width = w;
+        _pointSW = new Point (p);
+        _pointNE = new Point (_pointSW.getX() + w , _pointSW.getY() + h);
     }
 
     public RectangleB(Point sw, Point ne){
-        _pointNE = ne;
-        _pointSW = sw;
+        _pointNE = new Point(ne);
+        _pointSW = new Point(sw);
+        _height = Math.abs(_pointNE.getY() - _pointSW.getY());
+        _width = Math.abs(_pointNE.getX() - _pointSW.getX());
     }
 
     public RectangleB(RectangleB r){
-        int tempW = getWidth();
-        int tempH = getHeight();
-        _width = tempW;
-        _height = tempH;
-        _pointSW = this._pointSW;
-
+        _width = Math.abs(r.getPointNE().getX() - r.getPointSW().getX());
+        _height = Math.abs(r.getPointNE().getY() - r.getPointSW().getY());
+        _pointSW = new Point(r.getPointSW().getX() , r.getPointSW().getY());
+        _pointNE = new Point(r.getPointNE().getX() , r.getPointNE().getY());
     }
 
     public int getWidth(){
@@ -73,7 +74,7 @@ public class RectangleB {
     }
 
     public String toString(){
-        return "Width=" + _width + " Height=" + _height + " PointSW=(" + getPointSW() + ")";
+        return "Width=" + _width + " Height=" + _height + " PointSW=" + getPointSW();
     }
 
     public int getPerimeter(){
@@ -92,8 +93,8 @@ public class RectangleB {
     }
 
     public boolean equals(RectangleB other){
-        return (this.getPointNE() == other.getPointNE() && this.getPointSW() == other.getPointSW()
-                && this.getHeight() == other.getHeight() && this.getWidth() == other.getWidth());
+        return (this.getPointSW().equals(other.getPointSW()) && this.getHeight() == other.getHeight()
+                && this.getWidth() == other.getWidth());
     }
 
     public double getDiagonalLength(){
@@ -112,21 +113,23 @@ public class RectangleB {
     }
 
     public void changeSides(){
+        int temp = _width;
         _width = getHeight();
-        _height = getWidth();
+        _height = temp;
     }
 
-    public boolean isIn (RectangleB r){
-        int tempHeightR = r.getHeight();
-        int tempWidthR = r.getWidth();
-        int tempSWX = r.getPointSW()._x;
-        int tempNEY = r.getPointNE()._y;
-
-        return (tempSWX > getPointSW()._x && tempWidthR < getWidth()
-                && tempNEY <= getPointNE()._y && tempHeightR <= getHeight());
-    }
+    public boolean isIn (RectangleB r){return (this._pointSW.getX() >= r._pointSW.getX()
+            && this._pointNE.getX() <= r._pointNE.getX() && this._pointSW.getY()>= r._pointSW.getY()
+            && this._pointNE.getY() <= r._pointNE.getY());}
 
     public boolean overlap (RectangleB r){
-        return (r.getPointSW() == getPointSW() && r.getPointNE() == getPointNE());
+        return this._pointSW.getX() <= r._pointNE.getX() && this._pointSW.getY() <= r._pointNE.getY()
+                || this._pointSW.getY() >= r._pointSW.getX() && this._pointSW.getX() <= r._pointNE.getY()
+                || this._pointNE.getX() >= r._pointSW.getX() && this._pointSW.getX() <= r._pointNE.getY()
+                || this._pointNE.getX() >= r._pointSW.getX() && this._pointNE.getY() >= r._pointSW.getY()
+                || this._pointNE.getX() >= r._pointNE.getX() && this._pointNE.getY() >= r._pointNE.getY()
+                && this._pointSW.getX() <= r._pointSW.getX() && this._pointSW.getY() <= r._pointSW.getY()
+                || this._pointNE.getX() <= r._pointNE.getX() && this._pointNE.getY() <= r._pointNE.getY()
+                && this._pointSW.getX() >= r._pointSW.getX() && this._pointSW.getY() >= r._pointSW.getY();
     }
 }

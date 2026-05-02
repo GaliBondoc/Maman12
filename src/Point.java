@@ -13,8 +13,8 @@ public class Point
 
     //builder 1
     public Point(int x, int y){
-        int _x = x;
-        int _y = y;
+        _x = x;
+        _y = y;
     } // end builder
 
     // copier
