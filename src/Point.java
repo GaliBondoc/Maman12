@@ -7,8 +7,8 @@
 
 public class Point
 {
-    public int _x;
-    public int _y; //attribute
+    private int _x;
+    private int _y; //attribute
     private final double POWER = 2.0;
 
     //builder 1

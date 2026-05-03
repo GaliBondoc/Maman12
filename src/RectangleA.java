@@ -28,7 +28,7 @@ public class RectangleA {
 
         _height = h;
         _width = w;
-        _pointSW = p;
+        _pointSW = new Point (p);
     }
 
     public RectangleA(Point sw, Point ne){
@@ -38,8 +38,8 @@ public class RectangleA {
     }
 
     public RectangleA(RectangleA r){
-        _width = r._width;
-        _height = r._height;
+        _width = r.getWidth();
+        _height = r.getHeight();
         _pointSW = new Point (r._pointSW.getX(), r._pointSW.getY());
     }
 
@@ -52,7 +52,7 @@ public class RectangleA {
     }
 
     public Point getPointSW(){
-        return _pointSW;
+        return new Point(_pointSW);
     }
 
     public void setWidth(int w){
@@ -64,31 +64,27 @@ public class RectangleA {
     }
 
     public void setPointSW(Point p){
-        _pointSW._x = p._x;
-        _pointSW._y = p._y;
+        _pointSW = new Point (p);
     }
 
     public String toString(){
-        return "Width=" + _width + " Height=" + _height + " PointSW=" + getPointSW();
+        return "Width=" + getWidth() + " Height=" + getHeight() + " PointSW=" + _pointSW;
     }
 
     public int getPerimeter(){
-        return (_height + _width) * 2;
+        return (getHeight() + getWidth()) * 2;
     }
 
     public int getArea(){
-        return _height * _width;
+        return getHeight() * getWidth();
     }
 
     public void move(int deltaX, int deltaY){
-        int tempMoveX = _pointSW.getX() + deltaX;
-        int tempMoveY = _pointSW.getY() + deltaY;
-        _pointSW._x = tempMoveX;
-        _pointSW._y = tempMoveY;
+        _pointSW = new Point(_pointSW.getX() + deltaX, _pointSW.getY() + deltaY);
     }
 
     public boolean equals(RectangleA other){
-        return (this.getPointSW().equals(other.getPointSW()) && this.getHeight() == other.getHeight()
+        return (this._pointSW.equals(other._pointSW) && this.getHeight() == other.getHeight()
                 && this.getWidth() == other.getWidth());
     }
 
@@ -104,28 +100,22 @@ public class RectangleA {
     }
 
     public Point getPointNE(){
-        return new Point((_pointSW.getX() + _width), (_pointSW.getY() + _height));
+        return new Point((_pointSW.getX() + getWidth()), (_pointSW.getY() + getHeight()));
     }
 
     public void changeSides(){
-        int temp = _width;
+        int temp = getWidth();
         _width = getHeight();
         _height = temp;
     }
 
-    public boolean isIn (RectangleA r){return (this._pointSW.getX() >= r._pointSW.getX()
-            && this.getPointNE().getX() <= r.getPointNE().getX() && this._pointSW.getY()>= r._pointSW.getY()
-            && this.getPointNE().getY() <= r.getPointNE().getY());}
+    public boolean isIn (RectangleA r){
+        return (this._pointSW.getX() >= r.getPointSW().getX() && this.getPointNE().getX() <= r.getPointNE().getX()
+                && this._pointSW.getY()>= r.getPointSW().getY() && this.getPointNE().getY() <= r.getPointNE().getY());}
 
     public boolean overlap (RectangleA r){
-        return this._pointSW.getX() <= r.getPointNE().getX() && this._pointSW.getY() <= r.getPointNE().getY()
-            || this._pointSW.getY() >= r._pointSW.getX() && this._pointSW.getX() <= r.getPointNE().getY()
-            || this.getPointNE().getX() >= r._pointSW.getX() && this._pointSW.getX() <= r.getPointNE().getY()
-            || this.getPointNE().getX() >= r._pointSW.getX() && this.getPointNE().getY() >= r._pointSW.getY()
-            || this.getPointNE().getX() >= r.getPointNE().getX() && this.getPointNE().getY() >= r.getPointNE().getY()
-            && this._pointSW.getX() <= r._pointSW.getX() && this._pointSW.getY() <= r._pointSW.getY()
-            || this.getPointNE().getX() <= r.getPointNE().getX() && this.getPointNE().getY() <= r.getPointNE().getY()
-            && this._pointSW.getX() >= r._pointSW.getX() && this._pointSW.getY() >= r._pointSW.getY();
+        return this.getPointNE().getX() >= r.getPointSW().getX() && this._pointSW.getX() <= r.getPointNE().getX()
+                && this.getPointNE().getY() >= r.getPointSW().getY() && this._pointSW.getY() <= r.getPointNE().getY();
     }
 
 
