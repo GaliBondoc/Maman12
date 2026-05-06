@@ -2,7 +2,7 @@
  * Write a description of class RectangleA here.
  *
  * @author Galina Bondoc
- * @since (04 / 11 / 26, 11 : 50)
+ * @version 05.06
  */
 
 public class RectangleA {
